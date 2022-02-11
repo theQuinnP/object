@@ -1,0 +1,120 @@
+#include <Adafruit_NeoPixel.h>
+
+#define BUTTON   8    
+#define PIN 12   
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(6, PIN, NEO_GRB + NEO_KHZ800);
+
+bool oldState = HIGH;
+int type = 0;
+
+void setup() {
+  pinMode(BUTTON, INPUT_PULLUP);
+  strip.begin();
+  strip.show(); 
+}
+
+void loop() {
+  bool newState = digitalRead(BUTTON);
+
+ 
+  if (newState == LOW && oldState == HIGH) {
+    delay(20);
+    
+    newState = digitalRead(BUTTON);
+    if (newState == LOW) {
+      type++;
+      if (type > 5)
+        type=0;
+      cycles(type);
+    }
+  }
+
+  oldState = newState;
+}
+
+void cycles(int i) {
+  switch(i){
+
+            // start off
+    case 0: colorWipe(strip.Color(0, 0, 0), 120);    // set to off
+            break;
+
+            // color wipe RGB
+    case 1: colorWipe(strip.Color(100, 0, 0), 120);  // set to red
+            delay(250);
+            colorWipe(strip.Color(0, 100, 0), 120);  // set to green
+            delay(250);
+            colorWipe(strip.Color(0, 0, 100), 120);  // set to blue
+            delay(250);
+            break;
+
+            // off 
+    case 2: colorWipe(strip.Color(0, 0, 0), 20);    // set to off
+            break;
+
+            // rainbow blink
+    case 3: strip.setPixelColor(0, 20, 0, 0); //set 1 red
+            strip.show();
+            delay(200);
+            strip.setPixelColor(1, 20, 20, 0); //set 2 yellow
+            strip.show();
+            delay(200);
+            strip.setPixelColor(2, 0, 20, 0); //set 3 green
+            strip.show();
+            delay(200);
+            strip.setPixelColor(3, 0, 20, 20); //set 4 cyan
+            strip.show();
+            delay(200);
+            strip.setPixelColor(4, 0, 0, 20); //set 5 blue
+            strip.show();
+            delay(200);
+            strip.setPixelColor(5, 20, 0, 20); //set 6 magenta
+            strip.show();
+            delay(200);
+          
+          
+            for(int j=0; j<3; j++){
+              strip.setPixelColor(0, 0, 0, 0); //set 1 zero
+              strip.setPixelColor(1, 0, 0, 0); //set 2 zero
+              strip.setPixelColor(2, 0, 0, 0); //set 3 zero 
+              strip.setPixelColor(3, 0, 0, 0); //set 4 zero
+              strip.setPixelColor(4, 0, 0, 0); //set 5 zero
+              strip.setPixelColor(5, 0, 0, 0); //set 6 zero 
+              strip.show();
+              delay(150);
+            
+              strip.setPixelColor(0, 20, 0, 0); //set 1 red
+              strip.setPixelColor(1, 20, 20, 0); //set 2 yellow
+              strip.setPixelColor(2, 0, 20, 0); //set 3 green
+              strip.setPixelColor(3, 0, 20, 20); //set 4 cyan
+              strip.setPixelColor(4, 0, 0, 20); //set 5 blue
+              strip.setPixelColor(5, 20, 0, 20); //set 6 magenta 
+              strip.show();
+              delay(150);
+            }
+            break;
+
+            // off 
+    case 4: colorWipe(strip.Color(0, 0, 0), 20);    // set to off
+            break;
+
+            // color wipe cmyk
+    case 5: colorWipe(strip.Color(50, 50, 0), 120);  // set to yellow
+            delay(250);
+            colorWipe(strip.Color(0, 50, 50), 120);  // set to cyan
+            delay(250);
+            colorWipe(strip.Color(50, 0, 50), 120);  // set to magenta
+            delay(250);
+            break;
+  }
+}
+
+
+void colorWipe(uint32_t c, uint8_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, c);
+    strip.show();
+    delay(wait);
+  }
+}
