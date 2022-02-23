@@ -1,0 +1,28 @@
+void setup() {
+  pinMode(A1, INPUT);
+  pinMode(A0, INPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+  Serial.begin(9600); 
+
+}
+
+void loop() {
+  
+  int val = analogRead(A0);
+  int val0 = analogRead(A1);
+
+ 
+  Serial.println(val0);
+  
+  int actual = map(val0,0, 1023, 0, 255);
+
+  analogWrite(11, actual);
+  analogWrite(10, actual);
+  
+
+}
+
+// i had this working perfectly, accidnetally made some changes, 
+//and tried to make it how it was originally, but haven't tested it again, 
+//so if theres a few mistakes, i'm sorry
